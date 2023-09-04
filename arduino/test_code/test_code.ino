@@ -4,8 +4,8 @@ Servo servo1;
 
 int Dir1Pin_A = 3;      // 제어신호 1핀
 int Dir2Pin_A = 4;      // 제어신호 2핀
-int SpeedPin_A = 10;    // PWM제어를 위한 핀
-int pwm_speed = 150;
+int SpeedPin_A = 8;    // PWM제어를 위한 핀
+int pwm_speed = 0;
 
 void setup() 
 { 

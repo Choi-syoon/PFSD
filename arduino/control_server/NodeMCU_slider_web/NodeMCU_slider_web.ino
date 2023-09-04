@@ -1,12 +1,12 @@
 #include <ESP8266WiFi.h>
 #include <Servo.h>
  
-#define PIN_SERVO D0
+#define PIN_SERVO D5
  
 const char* ssid = "TEST_SSID";
 const char* password = "test1234";
  
-WiFiServer server(80);
+WiFiServer server(80); 
 Servo myServo;
  
 void setup() {
