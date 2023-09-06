@@ -8,35 +8,48 @@ import customtkinter as ctk
 #-----Main-----
 main = ctk.CTk() 
 main.title("PFSD Desktop GUI")
-main.geometry("960x640")
+main.geometry("500x480")
 main.resizable(False, False)
-main._set_appearance_mode('dark')
+ctk.set_appearance_mode('dark')
 
 
 # -----Functions-----
 
 
 # -----Sub-section-----
-sub_panel = ctk.CTkFrame(main)
-sub_panel.pack(side='bottom', padx=100)
+video_panel = ctk.CTkCanvas(main, width=512, height=384)
+video_panel.grid(padx=30, pady=20)
+option_panel = ctk.CTkFrame(main, corner_radius=10, height=100)
+option_panel.grid()
+btn_panel = ctk.CTkFrame(option_panel, height=70)
+btn_panel.grid(row=0, column=0)
+communication_panel = ctk.CTkFrame(option_panel, height=70)
+communication_panel.grid(row=0, column=1)
+
+canny_cbx = ctk.CTkCheckBox(btn_panel, text='Canny')
+canny_cbx.grid(row=0, column=0, ipady=10)
+roi_cbx = ctk.CTkCheckBox(btn_panel, text='ROI')
+roi_cbx.grid(row=1, column=0, ipady=10)
+roi_canny_cbx = ctk.CTkCheckBox(btn_panel, text="ROI Canny")
+roi_canny_cbx.grid(row=0, column=1)
+lanes_cbx = ctk.CTkCheckBox(btn_panel, text="Lanes")
+lanes_cbx.grid(row=1, column=1)
+
+communication_label = ctk.CTkLabel(communication_panel, text="Communication IP")
+communication_label.grid(row=0, column=0)
+communication_tbx = ctk.CTkTextbox(communication_panel, height=50)
+communication_tbx.grid(row=1, column=0)
+
+# ----- Option Button actions -----
+canny_action = ''
+
+# target_ip_label = ctk.CTkLabel(sub_panel, text="Please Entered WebServer IP")
+# target_ip_label.grid(row=0, column=0)
+
+# connect_ip_tbx = ctk.CTkTextbox(sub_panel)
+# connect_ip_tbx.grid(row=1, column=0)
 
 # request communicate section
 
-
-# -----Serial Communicate section-----
-# def Find_Serial_ports():
-#     serial_list = sp.comports()
-#     available_port = []
-#     for p in serial_list:
-#         available_port.append(p.device)
-#     return available_port
-
-# def on_combobox_select(event):
-#     selected_value = Serial_Cbx.get()
-#     print("Selected value:", selected_value)
-
-# Serial_Cbx = ctk.CTkComboBox(main, values=Find_Serial_ports())
-# Serial_Cbx.pack()
-# Serial_Cbx.bind("<<ComboboxSelected>>", on_combobox_select)
 
 main.mainloop()
