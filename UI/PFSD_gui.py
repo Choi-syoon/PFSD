@@ -1,4 +1,5 @@
 import serial
+import numpy as np
 import serial.tools.list_ports as sp
 import threading
 import cv2
@@ -14,6 +15,14 @@ main.title("PFSD Desktop GUI")
 main.geometry("500x420")
 main.resizable(False, False)
 ctk.set_appearance_mode('dark')
+
+# Functions
+def roi(target):
+    pts = np.array([[35, 400], [235, 250], [370, 250], [480, 400]], np.int32)
+    mask = np.zeros_like(target)
+    cv2.fillConvexPoly(mask, pts, (255, 255, 255))
+    masked = cv2.bitwise_and(target, mask)
+    return masked
 
 
 # Event Functions
@@ -98,20 +107,28 @@ def update_canny():
     if _:
         frame = cv2.resize(frame, (512, 384))
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        blurred_frame = cv2.GaussianBlur(gray_frame, (5, 5), 0)
+        canny_frame = cv2.Canny(blurred_frame, 100,100)
+        roi_canny_frame = roi(canny_frame)
         
         image = Image.fromarray(frame)
         image_tk = ImageTk.PhotoImage(image=image)
+        canny_image = Image.fromarray(canny_frame)
+        canny_image_tk = ImageTk.PhotoImage(image=canny_image)
+        roi_canny_image = Image.fromarray(roi_canny_frame)
+        roI_canny_tk = ImageTk.PhotoImage(image=roi_canny_image)
 
         video_panel.create_image(0, 0, anchor='nw', image=image_tk)
         video_panel.image_tk = image_tk
         
-        if isinstance(canny_canvas ,ctk.CTkCanvas):
-            canny_canvas.create_image(0, 0, anchor='nw', image=image_tk)
-            canny_canvas.image_tk = image_tk
+        if isinstance(canny_canvas,ctk.CTkCanvas):
+            canny_canvas.create_image(0, 0, anchor='nw', image=canny_image_tk)
+            canny_canvas.image_tk = canny_image_tk
 
-        elif isinstance(roi_canny_canvas ,ctk.CTkCanvas):
-            roi_canny_canvas.create_image(0, 0, anchor='nw', image=image_tk)
-            roi_canny_canvas.image_tk = image_tk
+        if isinstance(roi_canny_canvas ,ctk.CTkCanvas):
+            roi_canny_canvas.create_image(0, 0, anchor='nw', image=roI_canny_tk)
+            roi_canny_canvas.image_tk = roI_canny_tk
 
     main.after(25 ,update_canny)
     
